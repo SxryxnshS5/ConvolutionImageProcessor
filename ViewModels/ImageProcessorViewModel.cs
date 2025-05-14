@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using System.Windows.Media;
+using ConvolutionImageProcessing.Commands;
 
 namespace ConvolutionImageProcessing.ViewModels
 {
-    public class ViewModel
+    public class ImageProcessorViewModel
     {
-        public Image SelectedImage { get; set; }
-        public Image LivePreview { get; set; }
+        
     }
 }
