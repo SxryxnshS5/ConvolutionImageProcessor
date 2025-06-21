@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ConvolutionImageProcessing.Enums {
 
-namespace ConvolutionImageProcessing.Enums
-{
-    public enum ProcessingMode
-    {
+    // Will be used in future
+    public enum ProcessingMode {
         CPU,
         CUDA
     }

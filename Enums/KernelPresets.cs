@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ConvolutionImageProcessing.Enums {
+    using System.ComponentModel;
 
-namespace ConvolutionImageProcessing.Enums
-{
-    public enum KernalPresets {
+    public enum KernelPresets {
         // Edge detection filters
         [Description("Edge detection - Sobel X")]
         Sobel_X,
@@ -46,11 +40,6 @@ namespace ConvolutionImageProcessing.Enums
 
         // Utility
         [Description("Utility - Identity (No-op)")]
-        Identity,
-
-        // Custom input
-        [Description("Custom filter - User Input")]
-        UserInput
+        Identity
     }
-
 }
