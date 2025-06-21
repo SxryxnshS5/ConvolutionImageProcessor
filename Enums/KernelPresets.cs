@@ -17,26 +17,42 @@
         Roberts_X,
         [Description("Edge detection - Roberts Cross Y")]
         Roberts_Y,
+        [Description("Edge detection - Outline")]
+        Outline,
+        [Description("Edge detection - Diagonal 45°")]
+        Diagonal45,
+        [Description("Edge detection - Diagonal 135°")]
+        Diagonal135,
+        [Description("Edge detection - Kirsch North")]
+        KirschNorth,
 
         // Blur filters
-        [Description("Blur filters - Gaussian")]
+        [Description("Blur filter - Gaussian")]
         Gaussian,
-        [Description("Blur filters - BoxBlur")]
+        [Description("Blur filter - BoxBlur")]
         BoxBlur,
-        [Description("Blur filters - Median Filter")]
-        Median,
-        [Description("Blur filters - Motion Blur")]
+        [Description("Blur filter - Motion Blur")]
         MotionBlur,
+        [Description("Blur filter - Light Blur")]
+        LightBlur,
 
         // Sharpening filters
-        [Description("Sharpening filters - Sharpen")]
+        [Description("Sharpening filter - Sharpen")]
         Sharpen,
-        [Description("Sharpening filters - Edge Enhance")]
+        [Description("Sharpening filter - Strong Sharpen")]
+        StrongSharpen,
+        [Description("Sharpening filter - High Boost")]
+        HighBoost,
+        [Description("Sharpening filter - Edge Enhance")]
         EdgeEnhance,
 
         // Stylization
         [Description("Stylization - Emboss")]
         Emboss,
+        [Description("Stylization - Emboss 45°")]
+        Emboss45,
+        [Description("Stylization - Ripple Effect")]
+        RippleEffect,
 
         // Utility
         [Description("Utility - Identity (No-op)")]

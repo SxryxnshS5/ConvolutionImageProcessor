@@ -25,11 +25,11 @@
             Bitmap result = new Bitmap(image.Width, image.Height);
             BitmapData resultData = result.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 
-            int kernelWidth = kernel.GetLength(0);
-            int kernelHeight = kernel.GetLength(1);
+            int kernelHeight = kernel.GetLength(0);
+            int kernelWidth = kernel.GetLength(1);
 
-            int kernelCenterX = kernelWidth / 2;
             int kernelCenterY = kernelHeight / 2;
+            int kernelCenterX = kernelWidth / 2;
 
             int sourceStride = sourceData.Stride;
             int destStride = resultData.Stride;
@@ -41,6 +41,13 @@
             byte[] resultValues = new byte[Math.Abs(destStride) * image.Height];
 
             System.Runtime.InteropServices.Marshal.Copy(sourcePtr, sourceValues, 0, sourceValues.Length);
+
+            float kernelSum = 0f;
+            for(int ky = 0; ky < kernelHeight; ky++)
+                for(int kx = 0; kx < kernelWidth; kx++)
+                    kernelSum += kernel[ky, kx];
+
+            if(kernelSum == 0f) kernelSum = 1f;
 
             for(int y = 0; y < image.Height; y++) {
                 for(int x = 0; x < image.Width; x++) {
@@ -64,15 +71,20 @@
                         }
                     }
 
+                    resultB /= kernelSum;
+                    resultG /= kernelSum;
+                    resultR /= kernelSum;
+
                     byte newB = (byte)Math.Max(0, Math.Min(255, resultB));
                     byte newG = (byte)Math.Max(0, Math.Min(255, resultG));
                     byte newR = (byte)Math.Max(0, Math.Min(255, resultR));
 
                     int destIndex = (y * destStride) + (x * 4);
+
                     resultValues[destIndex] = newB;
                     resultValues[destIndex + 1] = newG;
                     resultValues[destIndex + 2] = newR;
-                    resultValues[destIndex + 3] = 255;
+                    resultValues[destIndex + 3] = sourceValues[destIndex + 3];
                 }
             }
 

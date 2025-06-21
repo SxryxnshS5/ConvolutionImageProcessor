@@ -12,10 +12,19 @@
     using Microsoft.Win32;
 
     public class ImageProcessorViewModel : INotifyPropertyChanged {
+        private readonly ImageProcessorModel imageProcessorModel;
+        private bool isProcessing;
+        private KernelPresets selectedKernelPreset;
+        private Bitmap currentImage;
+        private BitmapImage displayImage;
+        private BitmapImage resultDisplayImage;
+        private Bitmap resultImage;
+
         public event PropertyChangedEventHandler? PropertyChanged;
         public ICommand LoadImageCommand { get; }
         public ICommand SaveImageCommand { get; }
         public ICommand ProcessImageCommand { get; }
+
         public Bitmap CurrentImage {
             get => currentImage;
             set {
@@ -66,19 +75,24 @@
 
         public Array KernelPresetsList => Enum.GetValues(typeof(KernelPresets));
 
-        private readonly ImageProcessorModel imageProcessorModel;
-        private KernelPresets selectedKernelPreset;
-        private Bitmap currentImage;
-        private BitmapImage displayImage;
-        private BitmapImage resultDisplayImage;
-        private Bitmap resultImage;
+        public bool IsProcessing {
+            get => isProcessing;
+            set {
+                if(isProcessing != value) {
+                    isProcessing = value;
+                    RaisePropertyChanged();
+                    (ProcessImageCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                }
+            }
+        }
 
         public ImageProcessorViewModel() {
             imageProcessorModel = new ImageProcessorModel();
             LoadImageCommand = new RelayCommand(LoadImage);
-            ProcessImageCommand = new RelayCommand(Process);
+            ProcessImageCommand = new RelayCommand(Process, () => !IsProcessing);
             SaveImageCommand = new RelayCommand(SaveImage);
         }
+
         private void LoadImage() {
             OpenFileDialog openFileDialog = new OpenFileDialog {
                 Filter = "Image files|*.png;*.jpg;*.jpeg;*.bmp;*.gif",
@@ -127,10 +141,21 @@
             }
         }
 
-        private void Process() {
-            ResultImage = imageProcessorModel.ApplyConvolutionFilter(CurrentImage, SelectedKernelPreset);
+        private async void Process() {
+            if(CurrentImage == null) return;
+
+            IsProcessing = true;
+
+            await Task.Run(() =>
+            {
+                ResultImage = imageProcessorModel.ApplyConvolutionFilter(CurrentImage, SelectedKernelPreset);
+            });
+
             ResultDisplayImage = ConvertBitmapToBitmapImage(ResultImage);
+
+            IsProcessing = false;
         }
+
 
         private void UpdateCurrentImage() {
             if(currentImage != null) {
@@ -152,7 +177,6 @@
             }
         }
 
-        // Simple method with CallerMemberName so you can call RaisePropertyChanged() without parameters if you want
         protected void RaisePropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
